@@ -1,5 +1,6 @@
 package com.example.baryset.controller;
 
+import com.example.baryset.dto.RegionBriefDTO;
 import com.example.baryset.dto.RegionDTO;
 import com.example.baryset.service.RegionService;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,14 @@ public class RegionController {
     private final RegionService regionService;
 
     @GetMapping
-    public ResponseEntity<List<RegionDTO>> getAllRegions() {
-        List<RegionDTO> regions = regionService.getAllRegions();
+    public ResponseEntity<List<RegionBriefDTO>> getAllRegions() {
+        List<RegionBriefDTO> regions = regionService.getAllRegions();
         return ResponseEntity.ok(regions);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegionDTO> getOneRegion(@PathVariable Long id) {
-        RegionDTO result = regionService.getOneRegion(id);
+    public ResponseEntity<RegionBriefDTO> getOneRegion(@PathVariable Long id) {
+        RegionBriefDTO result = regionService.getOneRegion(id);
         return ResponseEntity.ok(result);
     }
 

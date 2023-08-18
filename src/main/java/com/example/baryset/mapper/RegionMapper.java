@@ -20,10 +20,21 @@ public class RegionMapper {
         RegionBriefDTO dto = new RegionBriefDTO();
         dto.setId(region.getId());
         dto.setName(region.getName());
+        dto.setLocation(getLocation(region));
         return dto;
     }
 
-    private List<RegionBriefDTO> toBriefDto(List<Region> regions) {
+    private String getLocation(Region region) {
+        StringBuilder location = new StringBuilder();
+        for (Region regionOut : regionRepository.findRegionLocation(region.getId())) {
+            location.append(regionOut.getName()).append(" - ");
+        }
+        if (!location.isEmpty())
+            location.delete(location.length() - 3, location.length());
+        return location.toString();
+    }
+
+    public List<RegionBriefDTO> toBriefDto(List<Region> regions) {
         List<RegionBriefDTO> dtos = new ArrayList<>();
         for (Region region : regions) {
             dtos.add(toBriefDto(region));
@@ -35,6 +46,7 @@ public class RegionMapper {
         RegionDTO dto = new RegionDTO();
         dto.setId(region.getId());
         dto.setName(region.getName());
+        dto.setLocation(getLocation(region));
         dto.setRegionsIn(toBriefDto(region.getRegionsIn()));
         return dto;
     }

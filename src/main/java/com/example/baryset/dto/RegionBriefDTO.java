@@ -8,4 +8,6 @@ public class RegionBriefDTO {
     private Long id;
 
     private String name;
+
+    private String location;
 }

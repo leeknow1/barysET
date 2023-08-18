@@ -4,6 +4,7 @@ import com.example.baryset.dto.ShopDTO;
 import com.example.baryset.dto.UserDTO;
 import com.example.baryset.entity.Region;
 import com.example.baryset.entity.User;
+import com.example.baryset.repository.RegionRepository;
 import com.example.baryset.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserMapper {
 
     private final ShopRepository shopRepository;
+    private final RegionRepository regionRepository;
     private final ShopMapper shopMapper;
     private final RegionMapper regionMapper;
 
@@ -46,11 +48,9 @@ public class UserMapper {
 
     private List<ShopDTO> getUserShops(Region region) {
         List<ShopDTO> dtos = new ArrayList<>();
-        dtos.add(shopMapper.toDto(shopRepository.findByRegionId(region.getId())));
-        if (region.getRegionsIn() != null && !region.getRegionsIn().isEmpty()) {
-            for (Region regionsIn : region.getRegionsIn()) {
-                dtos.add(shopMapper.toDto(shopRepository.findByRegionId(regionsIn.getId())));
-            }
+        shopRepository.findByRegionId(region.getId()).ifPresent(shop -> dtos.add(shopMapper.toDto(shop)));
+        for (Region regionIn : regionRepository.findRegionsIn(region.getId())) {
+            shopRepository.findByRegionId(regionIn.getId()).ifPresent(shop -> dtos.add(shopMapper.toDto(shop)));
         }
         return dtos;
     }
